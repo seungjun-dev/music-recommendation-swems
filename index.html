@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script type="module" src="./js/swems.js"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+    <script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+    <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 
 <body>
-    <div class="wrapper">
-        <div class="intro">
+    <div class="scroll-container">
+        <div class="page__wrapper__intro">
             <div class="title">
                 <h1>Welcome to Swems Music</h1>
+                <button onclick="location.href='#section2'">체험하기</button>
+                <button style="background-color:blueviolet;" onclick="window.open('Final.pdf');">논문읽기</button>
             </div>
         </div>
-        <div class="info">
+        <div id="section2" class="page__wrapper__contents">
+            <span class="contents__title">SWEMS 체험하기</span>
+            <div id="tui-pagination-container" class="tui-pagination">
+                <div id="grid"></div>
+            </div>
             <div id="chart"></div>
         </div>
-        <div class="content"></div>
     </div>
 </body>
 

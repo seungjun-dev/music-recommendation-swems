@@ -3,20 +3,24 @@
 
 body {
     margin: 0;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
 }
 
-.wrapper {
-    height: 100vh;
-    width: 100%;
+.page__wrapper {
+    width: 100vh;
 }
 
-.intro {
+.page__wrapper__intro {
     height: 100vh;
     width: 100%;
-    color: #FFFFFF;
+    color: #ffffff;
     text-align: center;
     background-color: #263238;
+}
+
+.page__wrapper__contents {
+    height: 100%;
+    width: 100%;
 }
 
 .title {
@@ -24,15 +28,45 @@ body {
     padding-top: 20%;
 }
 
-.info {
-    height: 50vh;
-    width: 100%;
+.scroll-container {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
 }
 
-.content {
-    height: 50vh;
-    width: 100%;
-    background-color: #e7e6e6;
+button {
+    width: 7vw;
+    height: 5vh;
+    border: none;
+    border-radius: 290486px;
+
+    background-color: #4e48f8;
+    color: #fff;
+
+    padding-left: 1em;
+    padding-right: 1em;
+
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
 }
 
+button:hover {
+    background-color: #4b7ff0;
+    transition: 0.7s;
+}
 
+#grid {
+    height: 100vh;
+    margin-left: 5%;
+}
+
+#chart {
+    margin-right: 5%;
+    float: right;
+}
+
+.contents__title {
+    margin-left: 5%;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+}
