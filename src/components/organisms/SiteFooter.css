@@ -1,0 +1,20 @@
+footer {
+  height: 70px;
+  padding: 0 8%;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #998b80;
+}
+footer .brand { font-size: 13px; }
+footer > a:last-child { color: #8d6657; }
+
+.dark-mode footer { color: #b5aa9e; border-color: #454b45; }
+.dark-mode footer > a:last-child { color: #e2aa92; }
+
+@media (max-width: 760px) {
+  footer { padding: 0 20px; }
+  footer > span { display: none; }
+}

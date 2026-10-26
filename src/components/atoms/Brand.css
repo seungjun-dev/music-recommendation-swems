@@ -1,0 +1,13 @@
+.brand {
+  font: italic 17px Georgia, serif;
+  color: #76675d;
+}
+.brand span {
+  font-size: 21px;
+  color: var(--rose);
+  vertical-align: -2px;
+  margin-right: 7px;
+}
+.dark-mode .brand {
+  color: #ddd5cb;
+}

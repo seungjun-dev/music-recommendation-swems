@@ -1,0 +1,10 @@
+.section-line {
+  display: flex;
+  justify-content: space-between;
+  font: 10px var(--mono);
+  letter-spacing: 0.1em;
+  color: #95887c;
+}
+.dark-mode .section-line {
+  color: #b4a89b;
+}

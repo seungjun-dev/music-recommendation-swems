@@ -1,0 +1,9 @@
+.note {
+  font: 10px var(--mono);
+  letter-spacing: 0.1em;
+  color: #95887c;
+  margin-top: 12px;
+}
+.dark-mode .note {
+  color: #b5aa9e;
+}

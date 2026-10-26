@@ -1,0 +1,47 @@
+.room-hero {
+  padding: 76px 12% 88px;
+  min-height: 585px;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 45px;
+  align-items: center;
+}
+.eyebrow {
+  font: 10px var(--mono);
+  letter-spacing: 0.1em;
+  color: #95887c;
+}
+.eyebrow span { margin-left: 24px; color: #bca99b; }
+.hero-text h1 {
+  font-size: clamp(62px, 6vw, 78px);
+  letter-spacing: -0.08em;
+  line-height: 1.32;
+  margin: 28px 0 17px;
+}
+.hero-text h1 em {
+  font: italic 1.02em Georgia, serif;
+  color: var(--rose);
+  letter-spacing: -0.06em;
+}
+.sub { font-size: 15px; line-height: 2; color: #86786e; }
+.hand-note {
+  font: italic 14px/1.3 Georgia, serif;
+  color: #ae7b69;
+  position: absolute;
+  left: 45%;
+  margin-top: 19px;
+  transform: rotate(-8deg);
+}
+
+.dark-mode .room-hero { background: #252c29; }
+.dark-mode .hero-text h1 { color: #f0ebe2; }
+.dark-mode .hero-text h1 em { color: #e0a68e; }
+.dark-mode .sub { color: #b9b0a5; }
+.dark-mode .eyebrow { color: #b4a89b; }
+.dark-mode .hand-note { color: #e4a58e; }
+
+@media (max-width: 760px) {
+  .room-hero { display: flex; flex-direction: column; align-items: stretch; padding: 55px 25px; gap: 35px; }
+  .hero-text h1 { font-size: 56px; }
+  .sub { font-size: 14px; }
+}

@@ -1,0 +1,36 @@
+.mood-result {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 28px 1fr 53px;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid #eee8e1;
+  background: none;
+  padding: 14px 5px;
+  cursor: pointer;
+  color: #4b443d;
+  font: inherit;
+}
+.mood-result:hover { background: #f7eee6; }
+.mood-rank,
+.mood-distance {
+  font: 10px var(--mono);
+  color: #aa9a8d;
+}
+.mood-song b { display: block; font-size: 12px; }
+.mood-song small { display: block; font-size: 10px; color: #a0948a; margin-top: 3px; }
+.mood-distance { text-align: right; }
+.mood-distance b { display: block; color: #aa705e; font-size: 12px; }
+.mood-distance small { font: 8px "Noto Sans KR", sans-serif; }
+
+.dark-mode .mood-result { border-color: #4a514a; color: #eee7dc; }
+.dark-mode .mood-result:hover { background: #3a413c; }
+.dark-mode .mood-song b { color: #eee7dc; }
+.dark-mode .mood-song small { color: #b0a69b; }
+.dark-mode .mood-distance b { color: #e0a68e; }
+
+@media (max-width: 760px) {
+  .mood-song b { font-size: 11px; }
+}

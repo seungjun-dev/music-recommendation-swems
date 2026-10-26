@@ -1,0 +1,22 @@
+header {
+  height: 78px;
+  padding: 0 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+header nav {
+  display: flex;
+  gap: 25px;
+  font-size: 12px;
+  color: #786c62;
+}
+.dark-mode header { background: #252c29; border-color: #454b45; }
+.dark-mode header nav { color: #ddd5cb; }
+.dark-mode header nav a:hover { color: #edb8a0; }
+
+@media (max-width: 760px) {
+  header { padding: 0 20px; height: 68px; }
+  header nav { display: none; }
+}

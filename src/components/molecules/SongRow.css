@@ -1,0 +1,60 @@
+.song-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 4px;
+  border: 0;
+  border-bottom: 1px solid #f0ebe5;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: #4b443d;
+  font: inherit;
+}
+.song-row.active,
+.song-row:hover { background: #f7eee6; }
+.row-num {
+  width: 17px;
+  font: 8px var(--mono);
+  color: #b2a69a;
+}
+.row-art {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e5e8d2;
+  color: #7c815d;
+  font: italic 12px Georgia;
+}
+.song-row:nth-child(3n) .row-art { background: #f3ddd3; color: #b87768; }
+.row-copy { flex: 1; min-width: 0; }
+.row-copy strong {
+  display: block;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 원본에서 .library small 규칙이 함께 적용되어 아티스트명은 모노 서체로 보인다. */
+.row-copy small {
+  display: block;
+  font: 10px var(--mono);
+  letter-spacing: 0.1em;
+  color: #a0948a;
+  margin-top: 2px;
+}
+.row-arrow { font-size: 10px; color: #bc8978; }
+
+.dark-mode .song-row { border-color: #424a44; color: #eee7dc; }
+.dark-mode .song-row.active,
+.dark-mode .song-row:hover { background: #3b443d; }
+.dark-mode .row-copy small { color: #b0a69b; }
+.dark-mode .row-art { background: #4a5543; color: #d2daa9; }
+.dark-mode .song-row:nth-child(3n) .row-art { background: #59463f; color: #e8b29c; }
+
+@media (max-width: 760px) {
+  .row-copy strong { font-size: 11px; }
+}

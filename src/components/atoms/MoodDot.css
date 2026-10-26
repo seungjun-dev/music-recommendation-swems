@@ -1,0 +1,10 @@
+.mood-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.sweet-dot { background: #ef9279; }
+.warm-dot { background: #c3aa52; }
+.enth-dot { background: #7c9b45; }
+.modern-dot { background: #668da2; }
+.sorrow-dot { background: #8d7aa1; }

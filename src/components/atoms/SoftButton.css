@@ -1,0 +1,16 @@
+.soft-button {
+  display: inline-flex;
+  gap: 35px;
+  padding: 16px 18px;
+  background: #7b5347;
+  color: #fff8ef;
+  font-size: 12px;
+  margin-top: 18px;
+}
+.soft-button span {
+  color: #f1c6a8;
+}
+.dark-mode .soft-button {
+  background: #c38872;
+  color: #231f1d;
+}

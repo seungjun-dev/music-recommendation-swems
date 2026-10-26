@@ -1,0 +1,18 @@
+.room-search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid #eee6dc;
+  color: #a87968;
+}
+.room-search input {
+  border: 0;
+  outline: 0;
+  background: none;
+  flex: 1;
+  min-width: 0;
+  font: 10px var(--sans);
+}
+.dark-mode .room-search { border-color: #4a514a; color: #d6a28c; }
+.dark-mode .room-search input { color: #eee7dc; }

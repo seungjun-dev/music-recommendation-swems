@@ -1,0 +1,31 @@
+.library {
+  padding: 23px;
+  border-right: 1px solid #eee6dc;
+  display: flex;
+  flex-direction: column;
+}
+.library-title {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eee6dc;
+  font: 12px var(--mono);
+  letter-spacing: 0.1em;
+  color: #7e7168;
+}
+.library-title .demo-count { float: right; }
+.song-list { max-height: 325px; overflow: auto; }
+.library > small {
+  font: 8px var(--sans);
+  letter-spacing: 0.1em;
+  color: #a4968b;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.dark-mode .library { border-color: #4a514a; }
+.dark-mode .library-title { border-color: #4a514a; color: #d6a28c; }
+.dark-mode .library > small { color: #b0a69b; }
+
+@media (max-width: 760px) {
+  .library { border-right: 0; border-bottom: 1px solid #eee6dc; }
+  .song-list { max-height: 215px; }
+}

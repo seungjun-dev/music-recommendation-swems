@@ -1,0 +1,12 @@
+#radar-chart { width: 100%; height: 100%; }
+.chart-grid { fill: none; stroke: #e9e5dd; }
+.chart-axis { stroke: #e9e5dd; }
+.chart-area { fill: #dda58a55; stroke: #bc806b; stroke-width: 2; }
+.chart-point { stroke: #fffdfa; stroke-width: 2; }
+.chart-text { font: 8px var(--mono); fill: #8b7d71; }
+
+.dark-mode .chart-grid,
+.dark-mode .chart-axis { stroke: #505750; }
+.dark-mode .chart-text { fill: #c2b8aa; }
+.dark-mode .chart-area { fill: #d18f7560; stroke: #db9b82; }
+.dark-mode .chart-point { stroke: #303734; }

@@ -1,0 +1,28 @@
+.listen-panel { padding: 22px 26px; }
+.record-chart {
+  height: 270px;
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid #eee6dc;
+}
+.close-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0 3px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.close-title small {
+  font: 400 7px var(--mono);
+  letter-spacing: 0.1em;
+  color: #95887c;
+}
+.recommendations { display: flex; flex-direction: column; }
+
+.dark-mode .record-chart { border-color: #4a514a; }
+.dark-mode .close-title { color: #eee7dc; }
+
+@media (max-width: 760px) {
+  .listen-panel { padding: 18px 14px; }
+  .record-chart { height: 240px; }
+}

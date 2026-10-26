@@ -31,7 +31,7 @@ npm run preview  # 빌드 결과 확인
 
 - **`data/` 디렉토리는 읽기 전용이다.** 파일을 수정, 이동, 이름 변경, 삭제하지 않고 새 파일도 만들지 않는다.
 - 앱은 `data/swems.json`을 읽어서 사용한다. 데이터를 가공해야 하면 메모리 안에서만 처리한다(원본 덮어쓰기, `data/` 안에 결과 저장 금지).
-- 데이터를 `public/` 등 다른 곳으로 복사해 사본을 만들지 않는다. alias `@data`로 원본을 직접 import한다 (예: `import songs from "@data/swems.json"`).
+- 데이터를 `public/` 등 다른 곳으로 복사해 사본을 만들지 않는다. alias `@data`로 원본을 직접 참조한다. 곡 데이터는 `useSongs` 훅이 `import songsUrl from "@data/swems.json?url"`로 URL만 받아 런타임에 fetch한다 (로딩 실패 화면을 유지하기 위해서).
 - `swems.json` 레코드 형태:
 
 ```json
@@ -46,16 +46,21 @@ npm run preview  # 빌드 결과 확인
 ```
 src/
 ├── components/
-│   ├── atoms/        # 더 쪼갤 수 없는 최소 단위 (Button, Eyebrow, MoodDot, RangeInput, SearchInput …)
-│   ├── molecules/    # atom 조합 (MoodSlider, SongListItem, MoodResultItem, MethodStep, SectionLine …)
-│   ├── organisms/    # 독립적인 화면 영역 (Header, Hero, WhySection, MethodSection, TuneSection, ListenSection, RadarChart, Footer …)
-│   ├── templates/    # 페이지 레이아웃 골격 (RoomTemplate)
-│   └── pages/        # 데이터와 상태를 연결하는 최상위 (RoomPage)
-├── hooks/            # 커스텀 훅 (useSongs, useTheme, useMoodProfile …)
-├── lib/              # 순수 함수 (distance, rankByProfile, nearestSongs, escape 등)
-├── constants/        # 감성 지수 정의, 기본값, 슬라이더 범위 등
-└── styles/           # 전역 토큰, 테마 변수
+│   ├── atoms/        # Brand, SectionLine, RichText, MoodDot, RangeInput, SoftButton, ResetButton, ThemeToggle, Note, EmptyState
+│   ├── molecules/    # HeroStill, FeelingLine, MethodStep, MethodVisual, MoodSlider, MoodResultItem, SearchField, SongRow, RecommendationItem, TrackInfo
+│   ├── organisms/    # SiteHeader, HeroSection, WhySection, MethodSection, TuneSection, ListenSection, SongLibrary, ListenPanel, RadarChart, SiteFooter
+│   ├── templates/    # RoomTemplate (헤더 · main · 푸터 골격)
+│   └── pages/        # RoomPage (데이터 · 상태를 연결하는 최상위)
+├── hooks/            # useSongs, useTheme, useMoodProfile, useFocusShortcut
+├── lib/              # 순수 함수: distance, recommend, search, radar, format, theme
+├── constants/        # mood(지수 · 범위 · 개수), radar(차트 좌표), theme, content(화면 문구)
+└── styles/           # global.css (토큰 · 리셋 · 다크모드 변수)
+scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 ```
+
+- 화면 문구는 `constants/content.js`에 둔다. 줄바꿈과 강조는 `RichText` 세그먼트(`문자열 | { em } | { b } | BR`)로 표현한다.
+- `lib/`과 `constants/`(content.js 제외) 안에서는 alias 대신 상대 경로로 import한다. Node에서 바로 불러 검증하기 위해서다.
+- 같은 계층끼리의 import는 허용한다 (예: `ListenSection` → `SongLibrary`, `ListenPanel` → `RadarChart`).
 
 ### 계층 규칙
 
@@ -63,7 +68,9 @@ src/
 - atom과 molecule은 props만 받아 렌더링하는 표현 컴포넌트로 만든다. 데이터 fetch, 전역 상태, side effect는 넣지 않는다.
 - 상태와 데이터 로딩은 `pages/`와 `hooks/`에서 처리하고 props로 내려준다.
 - 거리 계산, 정렬 같은 비즈니스 로직은 `lib/`에 순수 함수로 두고 컴포넌트에서 직접 구현하지 않는다.
-- 컴포넌트 하나에 파일 하나를 두고, 스타일은 컴포넌트 옆에 함께 둔다 (CSS Modules 권장).
+- 컴포넌트 하나에 파일 하나를 두고, 스타일은 컴포넌트 옆 `.css` 파일에 둔다. 그 컴포넌트의 다크모드(`.dark-mode …`)와 모바일(`@media (max-width: 760px)`) 규칙도 같은 파일에 넣는다.
+- 클래스 이름은 원본 시안과 같게 유지한다 (원본과 요소별 비교 검증을 하기 위해서). CSS Modules 전환은 원본과 화면이 일치하는 것을 확인한 뒤 별도 작업으로 한다.
+- `main.jsx`에서 `styles/global.css`를 컴포넌트보다 먼저 import해야 컴포넌트 스타일이 뒤에서 덮어쓴다.
 - 매직 넘버(1, 7, 0.1, 4.0 등)와 지수 목록은 `constants/`에 모아 정의한다.
 - 원본의 `innerHTML` + 수동 escape 방식은 쓰지 않고 JSX 렌더링을 사용한다.
 
@@ -98,6 +105,19 @@ src/
    - 다시 확인해야 하는 화면과 기능
    - `data/` 파일을 건드리지 않았는지 확인 (`git status data/`에 변경이 없어야 함)
 4. 검증에 실패한 항목이나 확인하지 못한 항목은 숨기지 않고 그대로 보고한다.
+
+### 검증 도구
+
+- `node scripts/verify-lib.mjs "$PWD"`: `src/lib`의 결과를 원본 알고리즘과 비교한다 (감정 프로필 2,000개, 전체 곡 추천, 레이더 좌표, 검색, 테마). 마지막 줄 `fails=0`이어야 한다.
+- `scripts/compare-room.js`: 개발 서버의 React 페이지(`/`) 콘솔에서 실행하면 `compareRoom(width, theme, actions)` 함수가 생긴다. 원본(`/concepts/room.html`)과 React 페이지를 같은 크기 iframe에 띄워 모든 요소의 계산 스타일, 위치/크기, 텍스트, 속성을 비교한다. `diffs`가 비어 있어야 한다 (의도적으로 바꾼 링크 `href`는 예외).
+  - 확인 조합: 1280/768/375/1600px × light/dark, 그리고 슬라이더 · 검색 · 곡 선택 · 추천 클릭 · 초기화 · 테마 토글 · 감정 결과 클릭 시나리오.
+
+### 원본과 의도적으로 다른 점
+
+- 헤더/푸터 로고 링크: 원본 `index.html`(시안 갤러리) → `/` (앱 첫 화면)
+- 논문 링크: `../Final.pdf` → Vite가 빌드에 포함하는 `/Final.pdf?url`
+- 푸터 "시안 후보 보기": `/concepts/index.html` (개발 서버에서만 열린다. 빌드에는 `concepts/`가 포함되지 않는다)
+- 데이터 로딩 실패 문구에서 "로컬 웹 서버에서 열어주세요." 안내를 뺐다 (Vite 앱에서는 의미가 없다)
 
 ## 금지 사항
 

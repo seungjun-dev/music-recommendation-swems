@@ -1,0 +1,12 @@
+.empty-state {
+  font-size: 9px;
+  color: #aaa096;
+  text-align: center;
+  padding: 12px;
+}
+.mood-empty {
+  font-size: 11px;
+  color: #a4968b;
+  text-align: center;
+  padding: 20px;
+}

@@ -1,0 +1,35 @@
+.feeling-line {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid var(--line);
+  padding-top: 19px;
+  font-size: 12px;
+  color: #93857b;
+}
+.feeling-line i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #bc8978;
+}
+.feeling-line b {
+  font-weight: 600;
+  color: #715e53;
+}
+.dark-mode .feeling-line {
+  border-color: #454b45;
+  color: #b8aea1;
+}
+.dark-mode .feeling-line b {
+  color: #e5c5ae;
+}
+.dark-mode .feeling-line i {
+  background: #cb907a;
+}
+@media (max-width: 760px) {
+  .feeling-line {
+    flex-wrap: wrap;
+    font-size: 10px;
+  }
+}
