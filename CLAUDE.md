@@ -12,18 +12,22 @@
 
 1. **빌드**: Vite
 2. **UI**: React (함수형 컴포넌트 + Hooks)
-3. 새 라이브러리 추가는 꼭 필요한 경우에만 하고, 추가 시 이유를 함께 남긴다.
+3. **언어**: TypeScript (`strict`). 앱 소스와 스크립트에 JavaScript 파일을 새로 만들지 않는다. 마이그레이션 기록은 `docs/typescript-migration.md`.
+4. 새 라이브러리 추가는 꼭 필요한 경우에만 하고, 추가 시 이유를 함께 남긴다.
 
-저장소 루트가 Vite 프로젝트 루트다. 진입점은 `index.html` → `src/main.jsx` → `src/components/pages/RoomPage.jsx`.
+저장소 루트가 Vite 프로젝트 루트다. 진입점은 `index.html` → `src/main.tsx` → `src/components/pages/RoomPage.tsx`.
 
-- `vite.config.js` alias: `@` → `src/`, `@data` → `data/`
+- `vite.config.ts` alias: `@` → `src/`, `@data` → `data/`
 - 개발 서버: `http://localhost:5173` (`.claude/launch.json`의 `vite-dev`)
 - 빌드 결과물 `dist/`는 git에서 제외한다.
+- tsconfig: `tsconfig.app.json`(브라우저: `src/`, `scripts/compare-room.ts`), `tsconfig.node.json`(Node: `vite.config.ts`, `scripts/verify-lib.ts`), 루트 `tsconfig.json`이 둘을 묶는다. tsc는 검사만 하고(`noEmit`), 변환은 Vite가 한다.
 
 ```bash
 npm install      # 의존성 설치
 npm run dev      # 개발 서버
-npm run build    # 프로덕션 빌드
+npm run build    # 타입 검사(tsc -b) + 프로덕션 빌드
+npm run typecheck   # 타입 검사만
+npm run verify:lib  # lib 결과를 원본 알고리즘과 비교
 npm run preview  # 빌드 결과 확인
 ```
 
@@ -54,12 +58,13 @@ src/
 ├── hooks/            # useSongs, useTheme, useMoodProfile, useFocusShortcut
 ├── lib/              # 순수 함수: distance, recommend, search, radar, format, theme
 ├── constants/        # mood(지수 · 범위 · 개수), radar(차트 좌표), theme, content(화면 문구)
+├── types/            # song(MoodKey, MoodProfile, Song, Ranked, MoodAxis …), content(Segment, 섹션 문구 타입)
 └── styles/           # global.css (토큰 · 리셋 · 다크모드 변수)
 scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 ```
 
-- 화면 문구는 `constants/content.js`에 둔다. 줄바꿈과 강조는 `RichText` 세그먼트(`문자열 | { em } | { b } | BR`)로 표현한다.
-- `lib/`과 `constants/`(content.js 제외) 안에서는 alias 대신 상대 경로로 import한다. Node에서 바로 불러 검증하기 위해서다.
+- 화면 문구는 `constants/content.ts`에 둔다. 줄바꿈과 강조는 `RichText` 세그먼트(`문자열 | { em } | { b } | BR`)로 표현한다.
+- `lib/`, `constants/`(content.ts 제외), `types/` 안에서는 alias 대신 `.ts` 확장자까지 쓴 상대 경로로 import한다 (예: `../constants/mood.ts`). Node(`--experimental-strip-types`)에서 바로 불러 검증하기 위해서다. 이 폴더에는 enum, namespace처럼 지울 수 없는 문법을 쓰지 않는다 (`erasableSyntaxOnly`).
 - 같은 계층끼리의 import는 허용한다 (예: `ListenSection` → `SongLibrary`, `ListenPanel` → `RadarChart`).
 
 ### 계층 규칙
@@ -70,9 +75,17 @@ scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 - 거리 계산, 정렬 같은 비즈니스 로직은 `lib/`에 순수 함수로 두고 컴포넌트에서 직접 구현하지 않는다.
 - 컴포넌트 하나에 파일 하나를 두고, 스타일은 컴포넌트 옆 `.css` 파일에 둔다. 그 컴포넌트의 다크모드(`.dark-mode …`)와 모바일(`@media (max-width: 760px)`) 규칙도 같은 파일에 넣는다.
 - 클래스 이름은 원본 시안과 같게 유지한다 (원본과 요소별 비교 검증을 하기 위해서). CSS Modules 전환은 원본과 화면이 일치하는 것을 확인한 뒤 별도 작업으로 한다.
-- `main.jsx`에서 `styles/global.css`를 컴포넌트보다 먼저 import해야 컴포넌트 스타일이 뒤에서 덮어쓴다.
+- `main.tsx`에서 `styles/global.css`를 컴포넌트보다 먼저 import해야 컴포넌트 스타일이 뒤에서 덮어쓴다.
 - 매직 넘버(1, 7, 0.1, 4.0 등)와 지수 목록은 `constants/`에 모아 정의한다.
 - 원본의 `innerHTML` + 수동 escape 방식은 쓰지 않고 JSX 렌더링을 사용한다.
+
+### 타입 규칙
+
+- 모든 컴포넌트는 props 인터페이스를 둔다. 다른 컴포넌트가 쓰는 props 타입만 export한다.
+- 여러 곳에서 쓰는 도메인 타입은 `types/`에 둔다. 한 파일에서만 쓰는 타입은 그 파일 안에 둔다.
+- 타입만 가져올 때는 `import type`을 쓴다 (`verbatimModuleSyntax`).
+- `any`를 쓰지 않는다. 외부 데이터(JSON)는 경계에서 한 번만 단언한다 (예: `useSongs`의 `response.json() as Promise<Song[]>`).
+- `ref`는 React 19 방식대로 일반 prop으로 받는다 (`ref?: Ref<HTMLElement>`).
 
 ## 원본 동작 명세 (재현 기준)
 
@@ -108,8 +121,9 @@ scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 
 ### 검증 도구
 
-- `node scripts/verify-lib.mjs "$PWD"`: `src/lib`의 결과를 원본 알고리즘과 비교한다 (감정 프로필 2,000개, 전체 곡 추천, 레이더 좌표, 검색, 테마). 마지막 줄 `fails=0`이어야 한다.
-- `scripts/compare-room.js`: 개발 서버의 React 페이지(`/`) 콘솔에서 실행하면 `compareRoom(width, theme, actions)` 함수가 생긴다. 원본(`/concepts/room.html`)과 React 페이지를 같은 크기 iframe에 띄워 모든 요소의 계산 스타일, 위치/크기, 텍스트, 속성을 비교한다. `diffs`가 비어 있어야 한다 (의도적으로 바꾼 링크 `href`는 예외).
+- `npm run typecheck`: 타입 오류가 0이어야 한다. `npm run build`에도 포함되어 있다.
+- `npm run verify:lib` (`scripts/verify-lib.ts`): `src/lib`의 결과를 원본 알고리즘과 비교한다 (감정 프로필 2,000개, 전체 곡 추천, 레이더 좌표, 검색, 테마). 마지막 줄 `fails=0`이어야 한다.
+- `scripts/compare-room.ts`: 개발 서버의 React 페이지(`/`) 콘솔에서 `const { compareRoom } = await import("/scripts/compare-room.ts")`로 불러 `await compareRoom(width, theme, action)`을 실행한다. 원본(`/concepts/room.html`)과 React 페이지를 같은 크기 iframe에 띄워 모든 요소의 계산 스타일, 위치/크기, 텍스트, 속성을 비교한다. `diffs`가 비어 있어야 한다 (의도적으로 바꾼 링크 `href`는 예외).
   - 확인 조합: 1280/768/375/1600px × light/dark, 그리고 슬라이더 · 검색 · 곡 선택 · 추천 클릭 · 초기화 · 테마 토글 · 감정 결과 클릭 시나리오.
 
 ### 원본과 의도적으로 다른 점
@@ -124,4 +138,5 @@ scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 - `data/` 안의 파일 편집, 삭제, 생성
 - 기존 정적 시안 파일(`concepts/`, `js/`, `css/`) 수정
 - 계층 역방향 import, 표현 컴포넌트 안의 데이터 fetch
+- 앱 소스와 스크립트에 `.js`/`.jsx` 파일 추가, `any` 사용, 타입 오류를 남긴 채 커밋
 - 검증 및 영향도 분석 없이 여러 기능을 한 번에 구현하기
