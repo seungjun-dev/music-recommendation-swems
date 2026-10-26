@@ -1,1 +1,7 @@
 node_modules/
+concepts/
+data/음원 데이터셋(원본).xlsx
+dist/
+pilot/
+# pilot/audio/
+__pycache__/
