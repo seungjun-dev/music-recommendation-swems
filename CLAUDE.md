@@ -6,7 +6,8 @@
 
 - SWEMS: 곡의 감정을 다섯 지수(Sweet, Warm, Enthusiastic, Modern, Sorrow, 각 1~7점)로 표현하고, 유클리드 거리가 가까운 곡을 추천하는 알고리즘의 데모 페이지.
 - 원본 시안: `concepts/room.html` + `concepts/room.css` + `concepts/room-enhancements.css` + `concepts/room-controls.js` + `js/swems.js`
-- 목표: 원본 시안의 화면과 동작을 그대로 유지하면서 React 컴포넌트 구조로 옮긴다. 기존 정적 파일(`concepts/`, `js/`)은 원본 비교용으로 두고 수정하지 않는다. (예전 루트 `index.html` 정적 페이지는 Vite 진입점으로 교체했고, 그 페이지 전용이던 `css/index.css`는 삭제했다. `js/swems.js`는 `concepts/room.html`이 불러오므로 남겨 둔다.)
+- 목표: 원본 시안의 화면과 동작을 그대로 유지하면서 React 컴포넌트 구조로 옮긴다. 기존 정적 파일(`concepts/`, `js/`)은 원본 비교용으로 두고 수정하지 않는다. (예전 루트 `index.html` 정적 페이지는 Vite 진입점으로 교체했고, 그 페이지 전용이던 `css/index.css`는 삭제했다. `js/swems.js`는 `concepts/room.html`이 불러오므로 로컬에 남겨 둔다.)
+- `concepts/`와 `js/`는 `.gitignore`로 git에서 제외되어 있어 로컬에만 있다. 저장소를 새로 받은 환경에는 원본 시안이 없으므로 원본 비교 검증(`compare-room`)을 할 수 없다.
 
 ## 기술 스택
 
@@ -123,7 +124,7 @@ scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 
 - `npm run typecheck`: 타입 오류가 0이어야 한다. `npm run build`에도 포함되어 있다.
 - `npm run verify:lib` (`scripts/verify-lib.ts`): `src/lib`의 결과를 원본 알고리즘과 비교한다 (감정 프로필 2,000개, 전체 곡 추천, 레이더 좌표, 검색, 테마). 마지막 줄 `fails=0`이어야 한다.
-- `scripts/compare-room.ts`: 개발 서버의 React 페이지(`/`) 콘솔에서 `const { compareRoom } = await import("/scripts/compare-room.ts")`로 불러 `await compareRoom(width, theme, action)`을 실행한다. 원본(`/concepts/room.html`)과 React 페이지를 같은 크기 iframe에 띄워 모든 요소의 계산 스타일, 위치/크기, 텍스트, 속성을 비교한다. `diffs`가 비어 있어야 한다 (의도적으로 바꾼 링크 `href`는 예외).
+- `scripts/compare-room.ts` (로컬에 `concepts/`, `js/`가 있어야 한다): 개발 서버의 React 페이지(`/`) 콘솔에서 `const { compareRoom } = await import("/scripts/compare-room.ts")`로 불러 `await compareRoom(width, theme, action)`을 실행한다. 원본(`/concepts/room.html`)과 React 페이지를 같은 크기 iframe에 띄워 모든 요소의 계산 스타일, 위치/크기, 텍스트, 속성을 비교한다. `diffs`가 비어 있어야 한다 (의도적으로 바꾼 링크 `href`는 예외).
   - 확인 조합: 1280/768/375/1600px × light/dark, 그리고 슬라이더 · 검색 · 곡 선택 · 추천 클릭 · 초기화 · 테마 토글 · 감정 결과 클릭 시나리오.
 
 ### 원본과 의도적으로 다른 점
