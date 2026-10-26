@@ -6,7 +6,7 @@
 
 - SWEMS: 곡의 감정을 다섯 지수(Sweet, Warm, Enthusiastic, Modern, Sorrow, 각 1~7점)로 표현하고, 유클리드 거리가 가까운 곡을 추천하는 알고리즘의 데모 페이지.
 - 원본 시안: `concepts/room.html` + `concepts/room.css` + `concepts/room-enhancements.css` + `concepts/room-controls.js` + `js/swems.js`
-- 목표: 원본 시안의 화면과 동작을 그대로 유지하면서 React 컴포넌트 구조로 옮긴다. 기존 정적 파일(`concepts/`, `js/`, `css/`)은 참고용으로 두고 수정하지 않는다. (예전 루트 `index.html` 정적 페이지는 삭제하고 Vite 진입점으로 교체했다.)
+- 목표: 원본 시안의 화면과 동작을 그대로 유지하면서 React 컴포넌트 구조로 옮긴다. 기존 정적 파일(`concepts/`, `js/`)은 원본 비교용으로 두고 수정하지 않는다. (예전 루트 `index.html` 정적 페이지는 Vite 진입점으로 교체했고, 그 페이지 전용이던 `css/index.css`는 삭제했다. `js/swems.js`는 `concepts/room.html`이 불러오므로 남겨 둔다.)
 
 ## 기술 스택
 
@@ -136,7 +136,7 @@ scripts/              # 검증 도구 (아래 "검증 도구" 참고)
 ## 금지 사항
 
 - `data/` 안의 파일 편집, 삭제, 생성
-- 기존 정적 시안 파일(`concepts/`, `js/`, `css/`) 수정
+- 기존 정적 시안 파일(`concepts/`, `js/`) 수정
 - 계층 역방향 import, 표현 컴포넌트 안의 데이터 fetch
 - 앱 소스와 스크립트에 `.js`/`.jsx` 파일 추가, `any` 사용, 타입 오류를 남긴 채 커밋
 - 검증 및 영향도 분석 없이 여러 기능을 한 번에 구현하기
